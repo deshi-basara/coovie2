@@ -67,6 +67,7 @@ def extract_file_data(file, folder):
 
 def main():
     movie_list = []
+    longest_title = 0
 
     # look for all available files inside directory recursively
     for root, subs, files in os.walk(search_path):
@@ -99,9 +100,14 @@ def main():
                 movie_object = Movie(
                     extracted_data[0],
                     extracted_data[1],
-                    movie_path
+                    movie_path,
+                    root
                 )
                 movie_list.append(movie_object)
+
+                # does the current movie have the longest title?
+                if longest_title < len(movie_object.title):
+                    longest_title = len(movie_object.title)
 
     result_str = 'Movies counted: {number}'.format(number=len(movie_list))
     print(result_str)
@@ -109,13 +115,13 @@ def main():
     # try to fetch imdb rating for each movie-object
     """for movie in movie_list:
         movie.fetch_rating()"""
-    for i in range(2):
+    for i in range(len(movie_list)):
         movie_list[i].fetch_rating()
 
     movie_list.sort(key=lambda x: x.rating, reverse=True)
 
     for movie in movie_list:
-        movie.print_data()
+        movie.print_data(longest_title)
 
 
 if __name__ == '__main__':
