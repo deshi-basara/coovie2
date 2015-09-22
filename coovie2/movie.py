@@ -1,15 +1,17 @@
 from imdbpie import Imdb
-imdb = Imdb(anonymize=True)
+imdb = Imdb(cache=True)
 
 
 class Movie(object):
 
     def __init__(self, title, year, path, folder):
         self.title = title
+        self.original_title = title
         self.year = year
         self.path = path
         self.folder = folder
-        self.rating = 0
+        self.rating = -1
+        self.imdb_top = -1
 
     def fetch_rating(self):
         search_results = imdb.search_for_title(self.title)
@@ -19,7 +21,7 @@ class Movie(object):
             if search["year"] == self.year:
                 # seems to be the searched movie, request rating
                 title_result = imdb.get_title_by_id(search["imdb_id"])
-                self.title = title_result.title
+                self.original_title = title_result.title
                 self.rating = title_result.rating
                 break
 
