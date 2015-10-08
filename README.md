@@ -1,9 +1,9 @@
 coovie2
 =======
 
-Python Cli-tool for listing movies inside a specified path according to their IMDb-rating. Movies that are inside the IMDb-Top 250 movies of all times are highlighted.
+Coovie is a python Cli-tool for listing movies inside a specified path according to their IMDb-rating. Movies that are inside the IMDb-Top 250 are highlighted.
 
-Rankings are captured via "imdbpie"'s iPhone api. If a movie title can't be find with the build in search, startpage.com is used the get the IMDb-id.
+Rankings are captured via imdbpie's iPhone api. If a movie title can't be found with the build-in iPhone-search, startpage.com is used to get the IMDb-id.
 
 
 ================
@@ -25,6 +25,7 @@ $  virtualenv -p /usr/bin/python3.4 venv
 $  . venv/bin/activate
 ```
 
+
 Install coovie2 in your virtual environment (or globally)
 ```Shell
 (venv)[coovie2]$  python setup.py install
@@ -38,7 +39,7 @@ or (if you want to modify the code)
 =========
 ### Usage
 
-To see all available arguments and options enter:
+To see all available arguments and options enter
 ```Shell
 (venv)[coovie2]$ python coovie2.py --help
 
@@ -52,12 +53,13 @@ Options:
   --help             Show this message and exit.
 ```
 
-Example search:
+Example search
 ```Shell
 (venv)[coovie2]$  python coovie2.py --size_limit 5000 --endings "mkv, mp4, ts" /run/media/user/1080p/
 ```
 
-You should get as result a list like this:
+
+You should get a result-list like
 ```Shell
 8.5 | Cinema Paradiso (1988)                 | /run/media/user/1080p/Cinema.Paradiso.1988.German.AC3D.DL.1080p.x264-xXx
 8.5 | 3 Idiots (2009)                        | /run/media/user/1080p/3.Idiots.2009.1080p.BluRay.x264-xXx
