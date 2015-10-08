@@ -1,5 +1,6 @@
 from imdbpie import Imdb
 from bs4 import BeautifulSoup
+from termcolor import colored
 import requests
 imdb = Imdb(cache=True)
 
@@ -15,7 +16,7 @@ class Movie(object):
         self.imdb_top = False
 
     def fetch_rating(self):
-        print("Fetching: " + self.title)
+        print("Fetching: " + self.title + " ...")
         search_results = imdb.search_for_title(self.title)
 
         # try to get the result by year
@@ -25,8 +26,11 @@ class Movie(object):
                 title_result = imdb.get_title_by_id(search["imdb_id"])
                 self.original_title = title_result.title
                 self.rating = title_result.rating
-                return
+            else:
+                # use startpage.com to find the imdb-id
+                self.fetch_rating_startpage()
 
+    def fetch_rating_startpage(self):
         # no imdb entry found for title, try to find imdb-entry via search-
         # engines
         search_engine = "https://startpage.com/do/metasearch.pl"
@@ -43,6 +47,7 @@ class Movie(object):
         }
         search_request = requests.post(search_engine, search_payload)
 
+        # valid response?
         if search_request.status_code == 200:
             # parse html-result and get the best search result
             startpage_html = str(search_request.text)
@@ -68,4 +73,9 @@ class Movie(object):
             year="("+self.year+")",
             path=self.folder
         )
-        print(data_str)
+
+        if self.imdb_top:
+            data_str_colored = colored(data_str, "yellow")
+            print(data_str_colored)
+        else:
+            print(data_str)
