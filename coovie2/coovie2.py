@@ -1,19 +1,32 @@
 
 import os
+import click
 from movie import Movie
 from scan import Scan
 from helper import Helper
 
 
-search_path = '/run/media/simon/emma/1080p_new/'
-movie_endings = ('.mkv', '.mp4')
-movie_size_limit = 1500 * 1024 * 1024  # MegaBytes
-
-
-def main():
+@click.command()
+@click.option('--endings',
+              default='mp4, mkv',
+              help='File-endings that are accepted as valid movie-files ' +
+              'Default: [.mkv, .mp4]'
+              )
+@click.option('--size_limit',
+              default="1500",
+              help='Smaller files are excluded from search (in MegaBytes)' +
+              "Default: 1500")
+@click.argument('search_path', required=True)
+def main(endings, size_limit, search_path):
+    # initiate global function variables
     movie_list = []
     longest_title = 0
 
+    # initiate options & arguments from cli
+    movie_endings = tuple(endings.split(", "))
+    movie_size_limit = int(size_limit) * 1024 * 1024  # MegaBytes
+
+    # initiate needed objects
     scanner = Scan(movie_endings, movie_size_limit)
     helper = Helper()
 
@@ -24,8 +37,6 @@ def main():
             # is movie file?
             bool_movie = scanner.is_movie(file)
 
-            if __debug__:
-                print(file + " is movie: " + str(bool_movie))
             if not bool_movie:
                 continue
 
@@ -67,10 +78,10 @@ def main():
         movie.imdb_top = helper.is_imdb_top(movie)
 
     # sort movies by their rating and print them
+    print("")
     movie_list.sort(key=lambda x: x.rating, reverse=True)
     for movie in movie_list:
         movie.print_data(longest_title)
-
 
 if __name__ == '__main__':
     main()
