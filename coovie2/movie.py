@@ -1,4 +1,5 @@
 from imdbpie import Imdb
+from bs4 import BeautifulSoup
 import requests
 imdb = Imdb(cache=True)
 
@@ -24,7 +25,7 @@ class Movie(object):
                 title_result = imdb.get_title_by_id(search["imdb_id"])
                 self.original_title = title_result.title
                 self.rating = title_result.rating
-                break
+                return
 
         # no imdb entry found for title, try to find imdb-entry via search-
         # engines
@@ -41,8 +42,23 @@ class Movie(object):
             "pg": "0"
         }
         search_request = requests.post(search_engine, search_payload)
-        print(search_request.text)
-        print(search_request.content)
+
+        if search_request.status_code == 200:
+            # parse html-result and get the best search result
+            startpage_html = str(search_request.text)
+            soup = BeautifulSoup(startpage_html, "lxml")
+            first_result = soup.find(id="first-result").a["href"]
+
+            # is valid imdb string?
+            imdb_url = "http://www.imdb.com/title/"
+            if imdb_url in first_result:
+                imdb_id = first_result.replace(imdb_url, "")
+                imdb_id = imdb_id.replace("/", "")
+
+                # seems to be the searched movie, request rating
+                title_result = imdb.get_title_by_id(imdb_id)
+                self.original_title = title_result.title
+                self.rating = title_result.rating
 
     def print_data(self, longest_title):
         data_str = "{rating} | {title} {year: <0{padding}} | {path}".format(
