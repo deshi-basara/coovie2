@@ -9,12 +9,12 @@ from helper import Helper
 @click.command()
 @click.option('--endings',
               default='mp4, mkv',
-              help='File-endings that are accepted as valid movie-files ' +
+              help='File-endings that are accepted as valid movie-files. ' +
               'Default: [.mkv, .mp4]'
               )
 @click.option('--size_limit',
               default="1500",
-              help='Smaller files are excluded from search (in MegaBytes)' +
+              help='Smaller files are excluded from search (in MegaBytes). ' +
               "Default: 1500")
 @click.argument('search_path', required=True)
 def main(endings, size_limit, search_path):
