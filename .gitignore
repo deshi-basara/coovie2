@@ -55,3 +55,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Imdbpie
+.imdbpie_cache
