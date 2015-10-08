@@ -6,7 +6,7 @@ class Movie(object):
 
     def __init__(self, title, year, path, folder):
         self.title = title
-        self.original_title = title
+        self.original_title = ""
         self.year = year
         self.path = path
         self.folder = folder

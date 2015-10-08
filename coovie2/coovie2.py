@@ -23,7 +23,9 @@ def main():
         for file in files:
             # is movie file?
             bool_movie = scanner.is_movie(file)
-            print(file + " is movie: " + str(bool_movie))
+
+            if __debug__:
+                print(file + " is movie: " + str(bool_movie))
             if not bool_movie:
                 continue
 
@@ -62,7 +64,7 @@ def main():
     for movie in movie_list:
         movie.fetch_rating()
         # is current movie in top 250
-        helper.is_imdb_top(movie)
+        movie.imdb_top = helper.is_imdb_top(movie)
 
     # sort movies by their rating and print them
     movie_list.sort(key=lambda x: x.rating, reverse=True)
