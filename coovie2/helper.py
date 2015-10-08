@@ -15,7 +15,7 @@ class Helper(object):
 
     def is_imdb_top(self, movie):
         if movie.original_title in self.top_titles:
-            print(movie.title + " is in 250")
+            # print(movie.title + " is in 250")
             return True
         else:
             return False
